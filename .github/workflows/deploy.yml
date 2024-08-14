@@ -11,17 +11,20 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    container:
-      image: node:16
+    # container:
+    #   image: node:16
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb
-      MONGODB_CLUSTER_ADDRESS: mongodb
+      # MONGODB_CLUSTER_ADDRESS: mongodb # can simply use identifier or service container defined under the "services" token IF tesing job runs inside a container
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017 # set IP adress and default MongoDB port IF testing job runs directly on defined runner
       MONGODB_USERNAME: root
       MONGODB_PASSWORD: example
       PORT: 8080
     services:
       mongodb:
         image: mongo
+        ports:
+          - 27017:27017 # only necessary when job is not running inside a container
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
